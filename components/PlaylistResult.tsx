@@ -31,6 +31,7 @@ export default function PlaylistResult({ playlist, playlistName }: PlaylistResul
   const [copiedAll, setCopiedAll] = useState(false)
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
   const [creatingPlaylist, setCreatingPlaylist] = useState(false)
+  const [playlistCreated, setPlaylistCreated] = useState(false)
   const router = useRouter()
 
   const copyAllSongs = () => {
@@ -86,6 +87,7 @@ export default function PlaylistResult({ playlist, playlistName }: PlaylistResul
         throw new Error("Failed to add tracks to playlist")
       }
 
+      setPlaylistCreated(true)
       toast({
         title: "Success",
         description: "Playlist created and tracks added successfully!",
@@ -105,45 +107,70 @@ export default function PlaylistResult({ playlist, playlistName }: PlaylistResul
   }
 
   return (
-    <div className="min-h-screen mb-24">
+    <div className="min-h-screen mb-24 px-4 sm:px-6 lg:px-8 mt-8">
       <div className="max-w-7xl mx-auto">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6  p-6 rounded-lg shadow-lg">
-      <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center">
-        <Music className="mr-3 h-8 w-8 md:h-10 md:w-10 text-purple-300" />
-        <span className="break-words">{playlistName}</span>
-      </h1>
-      <div className="flex flex-wrap gap-4">
-        <Button
-          variant="outline"
-          onClick={copyAllSongs}
-          className="bg-white text-purple-900 border-purple-300 hover:bg-purple-100 transition-colors duration-300 px-6 py-2 rounded-full font-semibold"
-        >
-          {copiedAll ? (
-            <Check className="h-5 w-5 mr-2 text-green-500" />
-          ) : (
-            <Copy className="h-5 w-5 mr-2 text-purple-900" />
-          )}
-          {copiedAll ? "Copied!" : "Copy All"}
-        </Button>
-        <Button
-          onClick={createSpotifyPlaylist}
-          disabled={creatingPlaylist}
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold transition-colors duration-300 px-6 py-2 rounded-full shadow-md"
-        >
-          {creatingPlaylist ? (
-            <>
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              Creating...
-            </>
-          ) : (
-            "Create Spotify Playlist"
-          )}
-        </Button>
-      </div>
-    </div>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 sm:gap-6 p-4 sm:p-6 rounded-lg shadow-lg">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white flex items-center">
+            <Music className="mr-2 sm:mr-3 h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 text-purple-300" />
+            <span className="break-words">{playlistName}</span>
+          </h1>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+            <Button
+              variant="outline"
+              onClick={copyAllSongs}
+              className="w-full sm:w-auto bg-white text-purple-900 border-purple-300 hover:bg-purple-100 transition-colors duration-300 px-4 sm:px-6 py-3 rounded-full font-semibold text-sm sm:text-base"
+            >
+              {copiedAll ? (
+                <Check className="h-5 w-5 mr-2 text-green-500" />
+              ) : (
+                <Copy className="h-5 w-5 mr-2 text-purple-900" />
+              )}
+              {copiedAll ? "Copied!" : "Copy All"}
+            </Button>
+            <Button
+              onClick={createSpotifyPlaylist}
+              disabled={creatingPlaylist || playlistCreated}
+              className={`${
+                playlistCreated
+                  ? "bg-green-600 hover:bg-green-700"
+                  : "bg-green-500 hover:bg-green-600"
+              } text-white font-semibold transition-colors duration-300 px-6 py-2 rounded-full shadow-md`}
+            >
+              {creatingPlaylist ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Creating...
+                </>
+              ) : playlistCreated ? (
+                <>
+                  <Check className="mr-2 h-5 w-5" />
+                  Playlist Created
+                </>
+              ) : (
+                "Create Spotify Playlist"
+              )}
+            </Button>
+          </div>
+        </div>
+
+        {playlistCreated && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-6 sm:mb-8 p-4 bg-green-500 text-white rounded-lg shadow-md text-center"
+          >
+            <p className="text-lg font-semibold">
+              Your Spotify playlist "{playlistName}" has been created successfully!
+            </p>
+            <p className="mt-2">
+              You can now find it in your Spotify account. Enjoy your new playlist!
+            </p>
+          </motion.div>
+        )}
 
         <motion.div 
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-10"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 sm:gap-8 lg:gap-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -155,27 +182,27 @@ export default function PlaylistResult({ playlist, playlistName }: PlaylistResul
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
             >
-              <div className="flex flex-col items-center justify-center text-center bg-[rgba(39,39,39,0.705)] p-2.5 rounded-[50px] h-min min-w-[300px] min-h-[25rem]">
-              <div className="w-full rounded-[50px] hover:opacity-65 hover:bg-black/60 transition-all duration-300">
-                <div className="relative aspect-square">
-                  <Image
-                    src={song.images?.[0] || '/placeholder.svg'}
-                    alt={`${song.name} album art`}
-                    fill
-                    className="object-cover rounded-[50px] p-3"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                  />
+              <div className="flex flex-col items-center justify-center text-center bg-[rgba(39,39,39,0.705)] p-2.5 rounded-[30px] sm:rounded-[50px] h-min w-full max-w-[300px] mx-auto">
+                <div className="w-full rounded-[30px] sm:rounded-[50px] hover:opacity-65 hover:bg-black/60 transition-all duration-300">
+                  <div className="relative aspect-square">
+                    <Image
+                      src={song.images?.[0] || '/placeholder.svg'}
+                      alt={`${song.name} album art`}
+                      fill
+                      className="object-cover rounded-[30px] sm:rounded-[50px] p-2 sm:p-3"
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center items-center text-center p-0">
+                  <h3 className="text-[1.225rem] font-semibold my-2 mt-2 mb-1.5 text-white">
+                    {song.name}
+                  </h3>
+                  <p className="text-gray-400 text-xs italic">
+                    {song.artist}
+                  </p>
                 </div>
               </div>
-              <div className="flex flex-col justify-center items-center text-center p-0">
-                <h3 className="text-[1.225rem] font-semibold my-2 mt-2 mb-1.5 text-white">
-                  {song.name}
-                </h3>
-                <p className="text-gray-400 text-xs italic">
-                  {song.artist}
-                </p>
-              </div>
-            </div>
             </motion.div>
           ))}
         </motion.div>
@@ -183,3 +210,4 @@ export default function PlaylistResult({ playlist, playlistName }: PlaylistResul
     </div>
   )
 }
+
