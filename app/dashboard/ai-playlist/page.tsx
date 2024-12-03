@@ -1,13 +1,11 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Loader2, Music } from 'lucide-react'
-import { FaGithub } from "react-icons/fa"
 import { useDebounce } from 'use-debounce'
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import PlaylistResult from "@/components/PlaylistResult"
 
 interface Song {
@@ -97,28 +95,22 @@ export default function ScrollableHeroSection() {
     }
   }
 
-  const handleSongSelect = (song: Song) => {
+  const handleSongSelect = async (song: Song) => {
     setSelectedSong(song)
     setInputSong(`${song.name} - ${song.artist}`)
     setShowDropdown(false)
-  }
 
-  const generatePlaylist = async () => {
     setLoading(true)
     setError("")
     setPlaylist([])
 
     try {
-      if (!selectedSong) {
-        throw new Error("Please select a song")
-      }
-
       const response = await fetch("/api/generate-playlist", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ song: `${selectedSong.name} - ${selectedSong.artist}` }),
+        body: JSON.stringify({ song: `${song.name} - ${song.artist}` }),
       })
 
       if (!response.ok) {
@@ -130,7 +122,7 @@ export default function ScrollableHeroSection() {
 
       const data = await response.json()
       setPlaylist(data.playlist)
-      setUserPlaylistName(`Playlist inspired by "${selectedSong.name}"`)
+      setUserPlaylistName(`Playlist inspired by "${song.name}"`)
     } catch (error) {
       console.error("Error generating playlist:", error)
       setError(
@@ -154,7 +146,7 @@ export default function ScrollableHeroSection() {
                 transition={{ repeat: Infinity, duration: 2 }}
                 className="mt-4 md:mt-0"
               >
-                <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Musical%20Notes.png" className="w-12 h-12 md:w-16 md:h-16"/>
+                <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Musical%20Notes.png" alt="Musical Notes" className="w-12 h-12 md:w-16 md:h-16"/>
               </motion.span>
             </h1>
             <div className="w-full max-w-2xl mt-8">
@@ -193,20 +185,15 @@ export default function ScrollableHeroSection() {
                   </div>
                 )}
               </div>
-              {selectedSong && (
-                <div className="mt-4 flex justify-center">
-                  <Button 
-                    onClick={generatePlaylist} 
-                    disabled={loading}
-                    className="bg-green-700 hover:bg-green-600 text-green-100 flex items-center space-x-2 text-sm md:text-base py-2 px-4 md:py-3 md:px-6"
-                  >
-                    <span>Generate Playlist</span>
-                  </Button>
-                </div>
-              )}
             </div>
 
             {error && <p className="text-red-500 mt-4 mb-7 text-sm md:text-base">{error}</p>}
+
+            {loading && (
+              <div className="mt-4 text-green-400">
+                Generating playlist...
+              </div>
+            )}
 
             {playlist.length > 0 && (
               <PlaylistResult playlist={playlist} playlistName={userPlaylistName} />
@@ -238,3 +225,4 @@ export default function ScrollableHeroSection() {
     </div>
   )
 }
+

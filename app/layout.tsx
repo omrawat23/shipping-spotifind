@@ -8,7 +8,10 @@ import { NavBar } from "@/components/Header";
 export const metadata: Metadata = {
   title: siteConfig.name,
   description: siteConfig.description,
-}
+  icons: {
+    icon: "/favicon.png",
+  },
+};
 
 export default function RootLayout({
   children,
