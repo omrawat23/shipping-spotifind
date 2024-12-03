@@ -7,7 +7,14 @@ import { Button } from "@/components/ui/button"
 import { GradientSpinner } from "@/components/ui/gradient-spinner"
 import { useEffect, useState } from "react"
 
-const PlaylistCard = ({ image, name, singer, genre }) => (
+interface PlaylistCardProps {
+  image: string; 
+  name: string;  
+  singer: string;
+  genre: string; 
+}
+
+const PlaylistCard: React.FC<PlaylistCardProps> = ({ image, name, singer, genre }) => (
   <div className="flex flex-col rounded-lg shadow-lg overflow-hidden border-4">
     <div className="w-full h-86 overflow-hidden">
       <img className="w-full h-full object-cover" src={image} alt={name} />
@@ -19,7 +26,6 @@ const PlaylistCard = ({ image, name, singer, genre }) => (
     </div>
   </div>
 );
-
 const DisplaySection = () => (
   <section className="py-16 mt-[-260px]">
   <div className="container mx-auto px-4">
