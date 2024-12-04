@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import { motion } from "framer-motion"
+import Link from "next/link"
 
 interface Song {
   id: string;
@@ -182,6 +183,7 @@ export default function PlaylistResult({ playlist, playlistName }: PlaylistResul
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
             >
+              <Link href={`https://open.spotify.com/track/${song.spotifyId}`}>
               <div className="flex flex-col items-center justify-center text-center bg-[rgba(39,39,39,0.705)] p-2.5 rounded-[30px] sm:rounded-[50px] h-min w-full max-w-[300px] mx-auto">
                 <div className="w-full rounded-[30px] sm:rounded-[50px] hover:opacity-65 hover:bg-black/60 transition-all duration-300">
                   <div className="relative aspect-square">
@@ -203,6 +205,7 @@ export default function PlaylistResult({ playlist, playlistName }: PlaylistResul
                   </p>
                 </div>
               </div>
+              </Link>
             </motion.div>
           ))}
         </motion.div>
