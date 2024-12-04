@@ -60,6 +60,7 @@ const DisplaySection = () => (
     </div>
   </div>
 </section>
+
 );
 
 export default function HeroSection() {
@@ -102,7 +103,7 @@ export default function HeroSection() {
 
   return (
     <main className="hero-section">
-      <div className="absolute inset-0 overflow-hidden w-full h-full">
+      <div className="absolute inset-0 overflow-hidden w-full h-full hidden sm:block ">
         {[
           {
             src: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Cloud%20with%20Rain.png",
