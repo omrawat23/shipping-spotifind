@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils"
 import { type Metadata } from "next"
 import "./globals.css";
 import { NavBar } from "@/components/Header";
+import { Analytics } from "@vercel/analytics/react"
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -29,6 +30,7 @@ export default function RootLayout({
       >
          <NavBar />
         {children}
+        <Analytics />
       </body>
     </html>
   );
