@@ -66,7 +66,7 @@ export const Profile: React.FC<ProfileProps> = ({ userData, onLogout }) => {
                 <DropdownMenuLabel>{userData?.display_name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                <Link href="/dashboard/ai-playlist">
+                {/* <Link href="/dashboard/ai-playlist">
                         <DropdownMenuItem>
                             <User className="mr-2 h-4 w-4" />
                             <span>Playlists</span>
@@ -83,7 +83,7 @@ export const Profile: React.FC<ProfileProps> = ({ userData, onLogout }) => {
                             <Settings className="mr-2 h-4 w-4" />
                             <span>Dashboard</span>
                         </DropdownMenuItem>
-                    </Link>
+                    </Link> */}
                 </DropdownMenuGroup>
                 <DropdownMenuItem
                     onClick={handleLogout}
