@@ -8,29 +8,18 @@ export async function GET() {
     'user-read-recently-played',
     'user-top-read',
     'user-read-playback-state',
-    'user-modify-playback-state',
-    'streaming',
     'user-read-currently-playing',
-    'user-read-playback-position',
   
     // Playlist Scopes
     'playlist-modify-public',
     'playlist-modify-private',
-    'playlist-read-private',
-    'playlist-read-collaborative',
-  
-    // Follow Scopes
-    'user-follow-modify',
-    'user-follow-read',
-  
+
     // Library Scopes
     'user-library-modify',
     'user-library-read',
   
     // User Profile Scopes
     'user-read-private',
-    'user-read-email',
-    'ugc-image-upload',
   ];
   
 
